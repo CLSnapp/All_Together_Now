@@ -30,6 +30,7 @@ const isLoggedIn = async (req, res, next) => {
   }
 };
 
+// Register a User
 router.post("/register", async (req, res, next) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -67,7 +68,7 @@ router.get("/me", isLoggedIn, async (req, res, next) => {
   }
 });
 
-// Get all users
+// Get All Users
 router.get("/users", isLoggedIn, async (req, res, next) => {
   try {
     const users = await prisma.users.findMany({});
@@ -77,7 +78,7 @@ router.get("/users", isLoggedIn, async (req, res, next) => {
   }
 });
 
-// Get a single user
+// Get a Single User by Id
 router.get("/user/:id", isLoggedIn, async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -92,7 +93,7 @@ router.get("/user/:id", isLoggedIn, async (req, res, next) => {
   }
 });
 
-// Delete a user
+// Delete a User
 router.delete("/user/:id", isLoggedIn, async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -107,7 +108,7 @@ router.delete("/user/:id", isLoggedIn, async (req, res, next) => {
   }
 });
 
-// Update user
+// Update Logged-In User
 router.put("/user/:id", isLoggedIn, async (req, res, next) => {
   try {
     const { id } = req.params;
