@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const JWT = process.env.JWT || "1234";
+const { prisma } = require("../db/common");
 
 // Import functions
 const { createUser, getUser, getUserId } = require("../db/db");
@@ -59,11 +60,36 @@ router.post("/login", async (req, res, next) => {
 
 // Get the Logged-in User's Information
 router.get("/me", isLoggedIn, async (req, res, next) => {
-    try {
-      res.send(req.user);
-    } catch (error) {
-      next(error);
-    }
-  });
+  try {
+    res.send(req.user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get all users
+router.get("/users", isLoggedIn, async (req, res, next) => {
+  try {
+    const users = await prisma.users.findMany({});
+    res.send(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get a single user
+router.get("/user/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await prisma.users.findUniqueOrThrow({
+      where: {
+        id: id,
+      },
+    });
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
