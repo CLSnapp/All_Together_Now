@@ -92,4 +92,39 @@ router.get("/user/:id", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// Delete a user
+router.delete("/user/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await prisma.users.delete({
+      where: {
+        id: id,
+      },
+    });
+    res.status(204).send(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Update user
+router.put("/user/:id", isLoggedIn, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await prisma.users.update({
+      where: {
+        id: id,
+      },
+      data: {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+      },
+    });
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
